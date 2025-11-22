@@ -1,2 +1,4 @@
 <?php
-include '/OtoWork/resources/views/customer/landing/index.php';
+// Redirect user langsung ke Landing Page Customer
+header("Location: customer/views/home.php");
+exit;
