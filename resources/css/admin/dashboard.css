@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.content-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #ffc20e;
+  color: #1f2937;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #f0b500;
+}
+
+.dashboard-grid,
+.dashboard-card,
+.card-title,
+.card-value,
+.card-desc,
+.main-content,
+.content-actions,
+.btn {
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 0;
+}
+.dashboard-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px 20px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.card-title {
+  font-size: 15px;
+  color: #444;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.card-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 4px;
+}
+.card-desc {
+  font-size: 13px;
+  color: #888;
+}

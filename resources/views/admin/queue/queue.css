@@ -1,0 +1,58 @@
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+.table-container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.queue-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.queue-table thead th {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e5e7eb;
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+.queue-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+.queue-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+.description-cell {
+  max-width: 250px;
+  white-space: normal;
+  word-break: break-word;
+}
+.action-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-done,
+.btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.btn-done {
+  background-color: #28a745;
+  color: white;
+}
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
