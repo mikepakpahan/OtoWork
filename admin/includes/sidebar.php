@@ -13,6 +13,11 @@
             <span>Spareparts</span>
         </a>
 
+        <a href="<?= BASE_URL ?>/admin/views/services.php" class="flex items-center py-3 px-4 mt-2 rounded transition-colors <?= ($activeMenu == 'services') ? 'bg-yellow-500 text-black font-bold' : 'hover:bg-gray-700 text-gray-300'; ?>">
+            <i class="fas fa-tools w-6"></i>
+            <span>Services</span>
+        </a>
+
         <a href="<?= BASE_URL ?>/admin/views/orders.php" class="flex items-center py-3 px-4 mt-2 rounded transition-colors <?= ($activeMenu == 'orders') ? 'bg-yellow-500 text-black font-bold' : 'hover:bg-gray-700 text-gray-300'; ?>">
             <i class="fas fa-shopping-cart w-6"></i>
             <span>Pesanan Masuk</span>
@@ -23,7 +28,12 @@
             <span>Booking Servis</span>
         </a>
 
-        <a href="<?= BASE_URL ?>/admin/views/customers.php" class="flex items-center py-3 px-4 mt-2 rounded transition-colors <?= ($activeMenu == 'customers') ? 'bg-yellow-500 text-black font-bold' : 'hover:bg-gray-700 text-gray-300'; ?>">
+        <a href="<?= BASE_URL ?>/admin/views/feedback.php" class="flex items-center py-3 px-4 rounded transition-all duration-200 <?= ($activeMenu == 'feedback') ? 'bg-[#FFC72C] text-black font-bold shadow-lg' : 'hover:bg-gray-700 text-gray-300 hover:text-white'; ?>">
+            <i class="fas fa-envelope w-6 text-center"></i>
+            <span class="ml-3">Feedback Customer</span>
+        </a>
+
+        <a href="<?= BASE_URL ?>/admin/views/customers.php" class="flex items-center py-3 px-4 rounded transition-all duration-200 <?= ($activeMenu == 'customers') ? 'bg-[#FFC72C] text-black font-bold shadow-lg' : 'hover:bg-gray-700 text-gray-300 hover:text-white'; ?>">
             <i class="fas fa-users w-6"></i>
             <span>Data Pelanggan</span>
         </a>
