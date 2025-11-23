@@ -97,7 +97,7 @@ if ($result_rating && $result_rating->num_rows > 0) {
                         echo '
                         <div class="bg-transparent group">
                             <div class="relative overflow-hidden rounded-md shadow-lg">
-                                <img src="' . BASE_URL . '/assets/img/' . htmlspecialchars($row["image_url"]) . '" 
+                                <img src="' . BASE_URL . '/assets/img/services/' . htmlspecialchars($row["image_url"]) . '" 
                                      alt="' . htmlspecialchars($row["service_name"]) . '" 
                                      class="w-full h-56 object-cover transition duration-300 group-hover:scale-110" 
                                      onerror="this.src=\'' . BASE_URL . '/assets/img/default-service.jpg\'" /> 
@@ -178,23 +178,26 @@ if ($result_rating && $result_rating->num_rows > 0) {
             <p class="text-gray-400 mb-8">Isi form di bawah, datang, langsung dikerjakan.</p>
 
             <?php if (isset($_SESSION['user_id'])): ?>
-                <form action="<?= BASE_URL ?>/logic/booking.php" method="POST" class="max-w-xl mx-auto text-left">
+                <form action="<?= BASE_URL ?>/logic/booking_master.php?act=create" method="POST" class="max-w-xl mx-auto text-left">
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Nama</label>
-                            <input type="text" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white" value="<?php echo htmlspecialchars($_SESSION['name']); ?>" readonly>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Nama Pelanggan</label>
+                            <input type="text" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-gray-400 cursor-not-allowed" value="<?php echo htmlspecialchars($_SESSION['name']); ?>" readonly>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                            <input type="email" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" readonly>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Nomor WhatsApp</label>
+                            <input type="text" name="phone_number" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none"
+                                value="<?php echo htmlspecialchars($_SESSION['phone_number'] ?? ''); ?>"
+                                placeholder="0812..." required>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Merk Motor</label>
-                            <select name="motor_type" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white" required>
-                                <option value="" disabled selected>-- Pilih Merk --</option>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Merk & Tipe Motor</label>
+                            <select name="motor_type" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none" required>
+                                <option value="" disabled selected>-- Pilih Motor --</option>
                                 <option value="Honda">Honda</option>
                                 <option value="Yamaha">Yamaha</option>
                                 <option value="Suzuki">Suzuki</option>
@@ -204,25 +207,45 @@ if ($result_rating && $result_rating->num_rows > 0) {
                             </select>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Plat Nomor</label>
+                            <input type="text" name="license_plate" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none uppercase" placeholder="BK 1234 AB" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                        <div>
                             <label class="block text-sm font-medium text-gray-300 mb-1">Tanggal Booking</label>
-                            <input type="date" name="booking_date" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white" required min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                            <input type="date" name="booking_date" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none" required min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Jam Kedatangan</label>
+                            <select name="booking_time" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none" required>
+                                <option value="" disabled selected>-- Pilih Jam --</option>
+                                <option value="09:00">09:00 - Pagi</option>
+                                <option value="10:00">10:00 - Pagi</option>
+                                <option value="11:00">11:00 - Siang</option>
+                                <option value="13:00">13:00 - Siang</option>
+                                <option value="14:00">14:00 - Siang</option>
+                                <option value="15:00">15:00 - Sore</option>
+                                <option value="16:00">16:00 - Sore</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Keluhan / Request</label>
-                        <textarea name="complaint" rows="4" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white" placeholder="Contoh: Ganti oli dan cek rem depan bunyi." required></textarea>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Keluhan / Jenis Servis</label>
+                        <textarea name="complaint" rows="4" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:border-yellow-500 focus:outline-none" placeholder="Contoh: Ganti oli shell, cek rem bunyi cit-cit, atau servis ringan." required></textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-3 px-4 bg-[#FFC72C] text-black font-bold rounded-md hover:bg-yellow-400 transition-colors">
-                        Kirim Jadwal Booking
+                    <button type="submit" class="w-full py-3 px-4 bg-[#FFC72C] text-black font-bold rounded-md hover:bg-yellow-400 transition-colors transform hover:scale-[1.02] duration-200">
+                        🚀 Kirim Jadwal Booking
                     </button>
                 </form>
 
             <?php else: ?>
-                <div class="mt-8 p-8 bg-gray-800 rounded-lg border border-gray-700">
+                <div class="mt-8 p-8 bg-gray-800 rounded-lg border border-gray-700 flex flex-col items-center">
                     <i class="fas fa-lock text-4xl text-yellow-400 mb-4"></i>
-                    <p class="text-white text-lg mb-6">Silahkan login terlebih dahulu untuk melakukan booking servis.</p>
+                    <p class="text-white text-lg mb-6">Eits, login dulu dong kalau mau booking!</p>
                     <a href="<?= BASE_URL ?>/customer/views/login.php" class="inline-block py-3 px-8 bg-[#FFC72C] text-black font-bold rounded-md hover:bg-yellow-400 transition-colors">
                         Login / Daftar Sekarang
                     </a>

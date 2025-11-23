@@ -11,11 +11,15 @@ $pageTitle = 'Pesanan Masuk';
 $activeMenu = 'orders';
 
 // --- LOGIC PENGAMBILAN DATA (Sama kayak kode lama lo, cuma dirapikan) ---
+// Tambahin o.address, o.payment_method, o.payment_proof
 $sql = "SELECT 
             o.id AS order_id,
             o.total_amount,
             o.order_date,
             o.status,
+            o.address,          
+            o.payment_method,   
+            o.payment_proof,    
             u.name AS user_name,
             u.email AS user_email,
             oi.quantity,
@@ -27,7 +31,7 @@ $sql = "SELECT
         JOIN order_items oi ON o.id = oi.order_id
         JOIN spareparts s ON oi.sparepart_id = s.id
         WHERE o.status = 'processing' 
-        ORDER BY o.order_date DESC"; // Kita cuma ambil yang statusnya 'processing'
+        ORDER BY o.order_date DESC";
 
 $result = $conn->query($sql);
 
@@ -46,7 +50,10 @@ if ($result && $result->num_rows > 0) {
                 ],
                 "details" => [
                     "date" => $row['order_date'],
-                    "total" => $row['total_amount']
+                    "total" => $row['total_amount'],
+                    "address" => $row['address'],
+                    "pay_method" => $row['payment_method'],
+                    "pay_proof" => $row['payment_proof']
                 ],
                 "items" => []
             ];
@@ -113,22 +120,56 @@ if ($result && $result->num_rows > 0) {
 
                                 <div class="p-4">
                                     <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Item Dipesan</div>
-                                    <ul class="space-y-3 mb-4">
+                                    <ul class="space-y-3 mb-4 border-b border-gray-100 pb-4">
                                         <?php foreach ($order['items'] as $item): ?>
-                                            <li class="flex justify-between items-center text-sm border-b border-gray-100 pb-2 last:border-0">
+                                            <li class="flex justify-between items-center text-sm">
                                                 <div class="flex items-center gap-2">
+                                                    <img src="<?= BASE_URL ?>/assets/img/spareparts/<?= $item['img'] ?>" class="w-8 h-8 rounded object-cover bg-gray-100">
                                                     <span class="font-medium text-gray-700"><?= htmlspecialchars($item['name']) ?></span>
                                                     <span class="text-gray-400 text-xs">x<?= $item['qty'] ?></span>
                                                 </div>
-                                                <span class="font-semibold text-gray-600">
-                                                    Rp<?= number_format($item['price'] * $item['qty'], 0, ',', '.') ?>
-                                                </span>
                                             </li>
                                         <?php endforeach; ?>
                                     </ul>
 
-                                    <div class="flex justify-between items-center pt-3 border-t border-dashed border-gray-300">
-                                        <span class="text-gray-600 font-bold">Total Tagihan</span>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-sm space-y-2 mb-4">
+
+                                        <?php
+                                        // Cek apakah alamat mengandung kata kunci "AMBIL DI BENGKEL"
+                                        $isPickup = strpos($order['details']['address'], 'AMBIL DI BENGKEL') !== false;
+                                        ?>
+                                        <div class="flex items-start gap-2">
+                                            <div class="mt-1">
+                                                <?php if ($isPickup): ?>
+                                                    <i class="fas fa-tools text-blue-500" title="Pasang di Bengkel"></i>
+                                                <?php else: ?>
+                                                    <i class="fas fa-truck text-green-500" title="Kirim ke Rumah"></i>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-gray-700"><?= $isPickup ? 'Pasang di Bengkel' : 'Home Delivery' ?></p>
+                                                <p class="text-xs text-gray-500 leading-tight">
+                                                    <?= htmlspecialchars($order['details']['address']) ?>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 border-t border-gray-200 pt-2 mt-2">
+                                            <i class="fas fa-wallet text-yellow-600"></i>
+                                            <span class="font-bold text-gray-700">
+                                                <?= ($order['details']['pay_method'] == 'cod') ? 'COD (Bayar Ditempat)' : 'Transfer Bank' ?>
+                                            </span>
+
+                                            <?php if ($order['details']['pay_method'] == 'transfer'): ?>
+                                                <button onclick="lihatBukti('<?= BASE_URL ?>/assets/img/proofs/<?= $order['details']['pay_proof'] ?>')" class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200 transition ml-auto font-bold">
+                                                    <i class="fas fa-image mr-1"></i> Cek Bukti
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-600 font-bold text-sm">Total Tagihan</span>
                                         <span class="text-xl font-bold text-green-600">Rp<?= number_format($order['details']['total'], 0, ',', '.') ?></span>
                                     </div>
                                 </div>
@@ -138,7 +179,7 @@ if ($result && $result->num_rows > 0) {
                                         <i class="fas fa-times mr-1"></i> Tolak
                                     </button>
                                     <button onclick="prosesOrder(<?= $order['id'] ?>, 'accept')" class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition font-bold text-sm shadow-sm">
-                                        <i class="fas fa-check mr-1"></i> Terima Order
+                                        <i class="fas fa-check mr-1"></i> Proses
                                     </button>
                                 </div>
                             </div>
@@ -183,6 +224,19 @@ if ($result && $result->num_rows > 0) {
                     window.location.href = `<?= BASE_URL ?>/logic/orders_master.php?act=${action}&id=${id}`;
                 }
             })
+        }
+
+        // FUNGSI LIHAT BUKTI TRANSFER (Popup Image)
+        function lihatBukti(imageUrl) {
+            Swal.fire({
+                title: 'Bukti Transfer Customer',
+                imageUrl: imageUrl,
+                imageWidth: 400,
+                imageAlt: 'Bukti Transfer',
+                showCloseButton: true,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#333'
+            });
         }
 
         // Alert dari PHP Session
