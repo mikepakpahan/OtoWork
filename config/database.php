@@ -19,7 +19,7 @@ define('APP_NAME', 'OtoWork');
 $host = 'localhost';
 $user = 'root';
 $pass = '';          // Default XAMPP biasanya kosong
-$db   = 'db_otowork'; // Nama database baru kita
+$db   = 'otowork_db'; // Nama database baru kita
 
 // 5. Buat Koneksi
 $conn = new mysqli($host, $user, $pass, $db);

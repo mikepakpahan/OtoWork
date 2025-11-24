@@ -1,44 +1,65 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+
+/* --- Base Variables --- */
+:root {
+  --bg-footer: #151b2b; /* Background Gelap */
+  --text-white: #ffffff;
+  --text-gray: #94a3b8; /* Teks Abu-abu */
+  --primary: #3b82f6; /* Biru Aksen */
+  --border-color: #1e293b; /* Garis border halus */
+}
+
+/* --- Footer Layout --- */
 .site-footer {
-  background-color: #13162b;
-  color: #a9a9b3; /* Warna teks dibuat sedikit lebih redup dari putih */
-  padding: 4rem 2rem 2rem 2rem;
-  font-size: 0.9rem;
+  background-color: var(--bg-footer);
+  padding: 80px 0 40px; /* Padding atas lebih besar sesuai desain */
+  color: var(--text-gray);
+  font-family: "Inter", sans-serif;
+  border-top: 1px solid var(--border-color);
 }
 
 .footer-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
+/* --- GRID 4 KOLOM --- */
 .footer-grid {
   display: grid;
-  /* Membuat kolom otomatis responsif */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
-  margin-bottom: 3rem;
+  /* Membuat 4 kolom proporsional: Brand lebih lebar, sisanya menyesuaikan */
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  margin-bottom: 60px;
 }
 
-.footer-column .footer-heading {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+/* --- Brand Column (Kolom 1) --- */
+.brand-column {
+  padding-right: 20px;
 }
 
 .footer-logo img {
-  height: 50px;
-  background-color: #ffb300;
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  height: 32px; /* Sesuaikan tinggi logo */
+  margin-bottom: 24px;
 }
 
 .footer-tagline {
+  font-size: 15px;
   line-height: 1.6;
+  max-width: 300px;
+  color: var(--text-gray);
 }
 
+/* --- Headings --- */
+.footer-heading {
+  color: var(--text-white);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* --- Links (Kolom 2 & 3) --- */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -46,66 +67,95 @@
 }
 
 .footer-links li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 16px; /* Jarak antar link lebih lega */
 }
 
 .footer-links a {
-  color: #a9a9b3;
+  color: var(--text-gray);
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-size: 15px;
+  transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: #fff;
+  color: var(--text-white);
 }
 
-.footer-contact p {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-.footer-contact i {
-  margin-top: 4px;
-  color: #ffb300;
-}
-.footer-contact a {
-  color: #a9a9b3;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.footer-contact a:hover {
-  color: #fff;
+/* --- Contact Column (Kolom 4) --- */
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0; /* Margin bawah sebelum sosmed */
 }
 
-.footer-bottom {
+.footer-contact-list li {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 2rem;
-  border-top: 1px solid #2a2e45;
-  flex-wrap: wrap; /* Agar responsif di layar kecil */
-  gap: 1rem;
+  margin-bottom: 16px;
+  font-size: 15px;
 }
 
-.copyright-text {
-  margin: 0;
+.footer-contact-list i {
+  width: 20px;
+  margin-right: 12px;
+  font-size: 16px;
+  color: var(--text-gray);
 }
 
+.footer-contact-list a,
+.footer-contact-list span {
+  color: var(--text-gray);
+  text-decoration: none;
+}
+
+/* --- Social Icons (Di Kolom 4) --- */
 .social-icons {
   display: flex;
-  gap: 1rem;
+  gap: 20px;
 }
 
 .social-icons a {
-  color: #a9a9b3;
-  font-size: 1.2rem;
-  text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease;
+  color: var(--text-gray);
+  font-size: 20px;
+  transition: transform 0.2s, color 0.2s;
 }
 
 .social-icons a:hover {
-  color: #fff;
-  transform: translateY(-3px);
+  color: var(--text-white);
+  transform: translateY(-2px);
+}
+
+/* --- Footer Bottom (Copyright) --- */
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--border-color); /* Garis pemisah di atas copyright */
+  text-align: center;
+}
+
+.copyright-text {
+  font-size: 14px;
+  color: #64748b; /* Abu-abu lebih gelap untuk copyright */
+}
+
+/* --- Responsive Mobile --- */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr; /* Tablet: 2 kolom x 2 baris */
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    padding-top: 60px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr; /* Mobile: 1 kolom menumpuk ke bawah */
+    gap: 40px;
+  }
+
+  .footer-heading {
+    margin-bottom: 16px;
+  }
 }
