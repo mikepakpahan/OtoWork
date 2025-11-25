@@ -43,10 +43,10 @@ if (isset($_SESSION['user_id'])) {
             <a href="<?= BASE_URL ?>/customer/views/spareparts.php" class="nav-link <?= ($activePage == 'spareparts') ? 'active' : ''; ?>">Sparepart</a>
 
             <div class="dropdown">
-                <a href="#" class="nav-link <?= ($activePage == 'services') ? 'active' : ''; ?>">
+                <a href="#" class="nav-link dropdown-toggle<?= ($activePage == 'services') ? 'active' : ''; ?>">
                     Booking <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
-                <div class="dropdown-content">
+                <div class="dropdown-content dropdown-menu">
                     <a href="<?= BASE_URL ?>/customer/views/home.php#booking-section">Booking Servis</a>
                     <a href="<?= BASE_URL ?>/customer/views/home.php#services">Semua Layanan</a>
                 </div>
@@ -65,11 +65,11 @@ if (isset($_SESSION['user_id'])) {
                 </a>
 
                 <div class="dropdown user-dropdown">
-                    <a href="#" class="nav-link welcome-text">
+                    <a href="#" class="nav-link welcome-text dropdown-toggle">
                         Hi, <?= htmlspecialchars(explode(' ', $_SESSION["name"])[0]); ?>
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </a>
-                    <div class="dropdown-content">
+                    <div class="dropdown-content dropdown-menu">
                         <a href="<?= BASE_URL ?>/customer/views/riwayat.php">Riwayat Saya</a>
                         <a href="<?= BASE_URL ?>/customer/views/profil.php">Profil</a>
                         <a href="<?= BASE_URL ?>/logic/auth.php?act=logout">Logout</a>
@@ -107,6 +107,35 @@ if (isset($_SESSION['user_id'])) {
 <div class="header-spacer"></div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggles = document.querySelectorAll(".dropdown-toggle");
+
+        toggles.forEach(toggle => {
+            toggle.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const menu = this.parentElement.querySelector(".dropdown-menu");
+
+                // Tutup dropdown lain yang terbuka
+                document.querySelectorAll(".dropdown-menu.show").forEach(openMenu => {
+                    if (openMenu !== menu) openMenu.classList.remove("show");
+                });
+
+                // Toggle dropdown saat ini
+                menu.classList.toggle("show");
+            });
+        });
+
+        // Klik di luar → tutup semua dropdown
+        document.addEventListener("click", function (e) {
+            if (!e.target.closest(".dropdown")) {
+                document.querySelectorAll(".dropdown-menu.show").forEach(menu => {
+                    menu.classList.remove("show");
+                });
+            }
+        });
+    });
+
     // Script Toggle Mobile Menu
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const mobileMenu = document.getElementById('mobile-menu');

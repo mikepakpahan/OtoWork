@@ -104,7 +104,15 @@
   color: #3b82f6;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown-menu.show {
   display: block;
 }
 
@@ -148,7 +156,6 @@
 .cart-icon {
   width: 24px;
   height: 24px;
-  filter: invert(1); /* Mengubah icon hitam menjadi putih */
   transition: opacity 0.3s;
 }
 
