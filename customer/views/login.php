@@ -9,7 +9,7 @@ require_once '../../config/database.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login-style.css" />
+    <link rel="stylesheet" href="<?= BASE_URL ?>/customer/assets/css/login.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <title>Login | OtoWork</title>
@@ -64,11 +64,11 @@ require_once '../../config/database.php';
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
                     <h1>Udah punya akun?</h1>
-                    <p>Login sini bro, antrian servis udah nungguin nih!</p>
+                    <p>Login sini, antrian servis udah nungguin nih!</p>
                     <button class="hidden" id="login">Sign In</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <h1>Warga Baru?</h1>
+                    <h1>New Member?</h1>
                     <p>Gabung sama OtoWork sekarang. Solusi bengkel anti ribet, sat set wat wet!</p>
                     <button class="hidden" id="register">Sign Up</button>
                 </div>

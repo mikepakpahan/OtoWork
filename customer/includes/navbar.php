@@ -47,7 +47,7 @@ if (isset($_SESSION['user_id'])) {
                     Booking <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <div class="dropdown-content dropdown-menu">
-                    <a href="<?= BASE_URL ?>/customer/views/home.php#booking-section">Booking Servis</a>
+                    <a href="<?= BASE_URL ?>/customer/views/booking.php">Booking Servis</a>
                     <a href="<?= BASE_URL ?>/customer/views/home.php#services">Semua Layanan</a>
                 </div>
             </div>

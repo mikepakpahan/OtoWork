@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || !isset($_POST['cart_ids'])) {
 
 $user_id = $_SESSION['user_id'];
 $cart_ids = $_POST['cart_ids']; // Array ID cart yang dipilih
-$cart_ids_str = implode(',', array_map('intval', $cart_ids)); // Ubah jadi string "1,2,5" buat query
+$cart_ids_str = implode(',', array_map('intval', $cart_ids)); 
 
 // Ambil detail barang yang mau dibeli
 $sql = "SELECT c.id, c.quantity, s.part_name, s.price, s.image_url 
@@ -35,123 +35,181 @@ if (empty($items)) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Konfirmasi Pesanan | OtoWork</title>
+    <title>Checkout | OtoWork</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Override default radio button style untuk dark mode */
+        input[type="radio"]:checked {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-[#0B0E17] text-gray-300 font-sans min-h-screen">
 
     <?php require_once '../includes/navbar.php'; ?>
 
-    <div class="container mx-auto px-4 py-10">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Checkout & Pembayaran</h1>
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-3xl font-bold text-white mb-8">Checkout Details</h1>
 
-            <form action="<?= BASE_URL ?>/logic/checkout_master.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-8">
-                <input type="hidden" name="act" value="process_order">
-                <input type="hidden" name="cart_ids_str" value="<?= $cart_ids_str ?>">
+        <form action="<?= BASE_URL ?>/logic/checkout_master.php" method="POST" enctype="multipart/form-data" class="flex flex-col lg:flex-row gap-10">
+            <input type="hidden" name="act" value="process_order">
+            <input type="hidden" name="cart_ids_str" value="<?= $cart_ids_str ?>">
 
-                <div class="w-full md:w-3/5 space-y-6">
+            <div class="w-full lg:w-2/3 space-y-8">
+                
+                <div class="bg-[#1F2937] p-6 rounded-lg border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-6 border-b border-gray-600 pb-2">Billing details</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-white mb-1">First name *</label>
+                                <input type="text" value="<?= explode(' ', $_SESSION['name'])[0] ?? '' ?>" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-white mb-1">Last name *</label>
+                                <input type="text" value="<?= explode(' ', $_SESSION['name'])[1] ?? '' ?>" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500" readonly>
+                            </div>
+                        </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                        <h3 class="text-lg font-bold mb-4 border-b pb-2"><i class="fas fa-truck text-green-600 mr-2"></i> Opsi Pengiriman</h3>
-
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="delivery_type" value="delivery" checked onclick="toggleDelivery('delivery')" class="peer sr-only">
-                                <div class="p-4 border rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-50 hover:bg-gray-50 transition text-center h-full">
-                                    <i class="fas fa-shipping-fast text-2xl mb-2 text-gray-600"></i>
-                                    <div class="font-bold text-sm">Kirim ke Rumah</div>
-                                </div>
-                            </label>
-
-                            <label class="cursor-pointer">
-                                <input type="radio" name="delivery_type" value="pickup" onclick="toggleDelivery('pickup')" class="peer sr-only">
-                                <div class="p-4 border rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-50 hover:bg-gray-50 transition text-center h-full">
-                                    <i class="fas fa-tools text-2xl mb-2 text-gray-600"></i>
-                                    <div class="font-bold text-sm">Pasang di Bengkel</div>
-                                </div>
-                            </label>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">Shipping Option *</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="delivery_type" value="delivery" checked onclick="toggleDelivery('delivery')" class="peer sr-only">
+                                    <div class="p-4 rounded border border-gray-600 bg-[#111827] peer-checked:border-blue-500 peer-checked:bg-blue-900/20 hover:bg-gray-800 transition text-center">
+                                        <i class="fas fa-truck text-xl mb-1 text-gray-400 peer-checked:text-blue-500"></i>
+                                        <div class="font-medium text-sm text-white">Delivery</div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="delivery_type" value="pickup" onclick="toggleDelivery('pickup')" class="peer sr-only">
+                                    <div class="p-4 rounded border border-gray-600 bg-[#111827] peer-checked:border-blue-500 peer-checked:bg-blue-900/20 hover:bg-gray-800 transition text-center">
+                                        <i class="fas fa-store text-xl mb-1 text-gray-400 peer-checked:text-blue-500"></i>
+                                        <div class="font-medium text-sm text-white">Local Pickup</div>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
 
                         <div id="address-input">
-                            <label class="block text-gray-600 text-sm mb-1">Alamat Lengkap Pengiriman</label>
-                            <textarea name="address" id="inp-address" rows="3" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-yellow-500" placeholder="Jalan, Nomor Rumah, RT/RW..."></textarea>
+                            <label class="block text-sm font-medium text-white mb-1">Street address *</label>
+                            <input type="text" name="address" id="inp-address" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 mb-2 focus:outline-none focus:border-blue-500" placeholder="House number and street name">
+                            <input type="text" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500" placeholder="Apartment, suite, unit, etc. (optional)">
                         </div>
 
                         <div id="date-input" class="hidden">
-                            <div class="bg-blue-50 p-4 rounded border border-blue-100 text-sm text-blue-800 mb-3">
-                                <i class="fas fa-info-circle mr-1"></i> Silahkan datang ke bengkel pada tanggal yang dipilih. Barang akan kami siapkan.
+                            <div class="bg-blue-900/30 p-4 rounded border border-blue-800 text-sm text-blue-200 mb-3 flex gap-2">
+                                <i class="fas fa-info-circle mt-0.5"></i> 
+                                <span>Please visit our workshop on the selected date. We will prepare your items.</span>
                             </div>
-                            <label class="block text-gray-600 text-sm mb-1">Rencana Tanggal Kedatangan</label>
-                            <input type="date" name="pickup_date" id="inp-date" min="<?= date('Y-m-d', strtotime('+1 day')) ?>" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-yellow-500">
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold mb-4 border-b pb-2"><i class="fas fa-wallet text-blue-500 mr-2"></i> Metode Pembayaran</h3>
-
-                        <div class="space-y-3">
-                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50">
-                                <input type="radio" name="payment_method" value="transfer" checked onclick="toggleProof(true)" class="w-5 h-5 text-yellow-500">
-                                <div class="ml-3">
-                                    <span class="block font-bold text-gray-800">Transfer Bank (BCA/Mandiri)</span>
-                                    <span class="block text-sm text-gray-500">Kirim ke: 123-456-7890 a.n OtoWork</span>
-                                </div>
-                            </label>
-
-                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50">
-                                <input type="radio" name="payment_method" value="cod" onclick="toggleProof(false)" class="w-5 h-5 text-yellow-500">
-                                <div class="ml-3">
-                                    <span class="block font-bold text-gray-800">Bayar di Tempat (COD)</span>
-                                    <span class="block text-sm text-gray-500">Bayar tunai saat kurir sampai.</span>
-                                </div>
-                            </label>
+                            <label class="block text-sm font-medium text-white mb-1">Pickup Date *</label>
+                            <input type="date" name="pickup_date" id="inp-date" min="<?= date('Y-m-d', strtotime('+1 day')) ?>" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500 [color-scheme:dark]">
                         </div>
 
-                        <div id="proof-section" class="mt-4 p-4 bg-blue-50 rounded border border-blue-100">
-                            <label class="block text-sm font-bold text-blue-800 mb-2">Upload Bukti Transfer</label>
-                            <input type="file" name="payment_proof" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
-                            <p class="text-xs text-gray-500 mt-1">*Format JPG/PNG. Pastikan foto jelas.</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="w-full md:w-2/5">
-                    <div class="bg-white p-6 rounded-xl shadow-sm sticky top-24">
-                        <h3 class="text-lg font-bold mb-4">Ringkasan Pesanan</h3>
-
-                        <div class="space-y-3 max-h-60 overflow-y-auto mb-4 pr-2">
-                            <?php foreach ($items as $item): ?>
-                                <div class="flex justify-between items-center text-sm">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold text-gray-700"><?= $item['quantity'] ?>x</span>
-                                        <span class="text-gray-600"><?= htmlspecialchars($item['part_name']) ?></span>
-                                    </div>
-                                    <span class="font-medium">Rp <?= number_format($item['price'] * $item['quantity'], 0, ',', '.') ?></span>
-                                </div>
-                            <?php endforeach; ?>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-1">Phone (optional)</label>
+                            <input type="text" value="<?= $_SESSION['phone'] ?? '' ?>" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500">
                         </div>
 
-                        <div class="border-t border-dashed border-gray-300 pt-4 mt-2">
-                            <div class="flex justify-between items-center text-lg font-bold">
-                                <span>Total Bayar</span>
-                                <span class="text-[#FFC72C]">Rp <?= number_format($grand_total, 0, ',', '.') ?></span>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-1">Email address *</label>
+                            <input type="email" value="<?= $_SESSION['email'] ?? '' ?>" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500" readonly>
                         </div>
-
-                        <button type="submit" class="w-full mt-6 bg-[#FFC72C] hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg shadow-lg transition transform hover:scale-105">
-                            <i class="fas fa-check-circle mr-2"></i> PROSES PESANAN
-                        </button>
-
-                        <a href="cart.php" class="block text-center text-sm text-gray-500 mt-4 hover:underline">Kembali ke Keranjang</a>
+                        
+                        <div class="pt-2">
+                            <label class="block text-sm font-medium text-white mb-1">Order notes (optional)</label>
+                            <textarea name="notes" rows="4" class="w-full bg-[#111827] border border-gray-600 text-white rounded p-3 focus:outline-none focus:border-blue-500" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                        </div>
                     </div>
                 </div>
 
-            </form>
-        </div>
+            </div>
+
+            <div class="w-full lg:w-1/3">
+                <div class="bg-[#1F2937] p-6 rounded-lg border border-gray-700 sticky top-24">
+                    <h3 class="text-xl font-bold text-white mb-6">Your Order</h3>
+
+                    <div class="space-y-4 mb-6 border-b border-gray-600 pb-6">
+                        <div class="flex justify-between text-sm font-bold text-gray-400 uppercase tracking-wider">
+                            <span>Product</span>
+                            <span>Subtotal</span>
+                        </div>
+                        
+                        <?php foreach ($items as $item): ?>
+                            <div class="flex justify-between items-start text-sm">
+                                <div class="text-gray-300 pr-4">
+                                    <?= htmlspecialchars($item['part_name']) ?> 
+                                    <span class="text-gray-500">x <?= $item['quantity'] ?></span>
+                                </div>
+                                <div class="text-white font-medium whitespace-nowrap">
+                                    Rp <?= number_format($item['price'] * $item['quantity'], 0, ',', '.') ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <div class="space-y-3 mb-8">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Subtotal</span>
+                            <span class="text-white font-bold">Rp <?= number_format($grand_total, 0, ',', '.') ?></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Shipping</span>
+                            <span class="text-white text-sm">Calculated at next step</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-gray-600">
+                            <span class="text-white font-bold text-lg">Total</span>
+                            <span class="text-[#FFC72C] font-bold text-xl">Rp <?= number_format($grand_total, 0, ',', '.') ?></span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="border-b border-gray-700 pb-4">
+                            <label class="flex items-start cursor-pointer">
+                                <input type="radio" name="payment_method" value="transfer" checked onclick="toggleProof(true)" class="mt-1 w-4 h-4 text-blue-600 bg-gray-700 border-gray-500 focus:ring-blue-500">
+                                <div class="ml-3">
+                                    <span class="block text-white font-medium">Direct Bank Transfer</span>
+                                    <p class="text-xs text-gray-400 mt-1">Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
+                                </div>
+                            </label>
+                            
+                            <div id="proof-section" class="mt-3 ml-7 p-3 bg-[#111827] rounded border border-gray-600">
+                                <label class="block text-xs font-bold text-gray-300 mb-2">Upload Payment Proof</label>
+                                <input type="file" name="payment_proof" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-gray-700 file:text-white hover:file:bg-gray-600">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="payment_method" value="cod" onclick="toggleProof(false)" class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-500 focus:ring-blue-500">
+                                <span class="ml-3 text-white font-medium">Cash On Delivery</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-gray-500 mb-6">
+                        Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#" class="text-blue-400 hover:underline">privacy policy</a>.
+                    </div>
+
+                    <div class="flex items-start mb-6">
+                        <input id="terms" type="checkbox" required class="w-4 h-4 mt-0.5 rounded bg-gray-700 border-gray-500 text-blue-600 focus:ring-blue-500">
+                        <label for="terms" class="ml-2 text-sm text-gray-400">I have read and agree to the website <a href="#" class="text-blue-400 hover:underline">terms and conditions</a> *</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#3B82F6] hover:bg-blue-600 text-white font-bold py-4 rounded shadow-lg transition duration-200">
+                        Place order
+                    </button>
+                </div>
+            </div>
+
+        </form>
     </div>
 
     <?php require_once '../includes/footer.php'; ?>
@@ -168,29 +226,29 @@ if (empty($items)) {
                 dateInput.classList.add('hidden');
                 inpAddr.required = true;
                 inpDate.required = false;
-                inpDate.value = ''; // Reset tanggal
+                inpDate.value = '';
             } else {
                 addrInput.classList.add('hidden');
                 dateInput.classList.remove('hidden');
                 inpAddr.required = false;
                 inpDate.required = true;
-                inpAddr.value = ''; // Reset alamat
+                inpAddr.value = '';
             }
         }
-        // Jalankan sekali pas load
+        // Init state
         toggleDelivery('delivery');
 
         function toggleProof(show) {
             const section = document.getElementById('proof-section');
+            const input = section.querySelector('input');
             if (show) {
                 section.style.display = 'block';
-                section.querySelector('input').setAttribute('required', 'required');
+                input.setAttribute('required', 'required');
             } else {
                 section.style.display = 'none';
-                section.querySelector('input').removeAttribute('required');
+                input.removeAttribute('required');
             }
         }
     </script>
 </body>
-
 </html>

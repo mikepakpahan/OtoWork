@@ -39,7 +39,7 @@ require_once '../../config/database.php';
             </p>
             <div class="hero-buttons">
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="#booking-form" class="btn-hero-primary">Book Service Now</a>
+                    <a href="<?= BASE_URL ?>/customer/views/booking.php" class="btn-hero-primary">Book Service Now</a>
                 <?php else: ?>
                     <a href="<?= BASE_URL ?>/customer/views/login.php" class="btn-hero-primary">Book Service Now</a>
                 <?php endif; ?>
